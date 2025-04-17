@@ -1,5 +1,24 @@
 <?php
 include("sql.php");
+session_start();
+if(isset($_POST["user_token"])){
+    $token = $_POST['user_token'];
+
+    // التحقق أولاً إذا كان التوكن موجود في القاعدة
+    $check = $conn->query("SELECT * FROM tokens WHERE token_value='$token'");
+
+    if($check->num_rows == 0){  // لو التوكن غير موجود، نضيفه
+        $sql = "INSERT INTO tokens (token_value) VALUES ('$token')";
+        $result = $conn->query($sql);
+
+        if($result){
+            echo "go check catogry page and find tables";  // الرسالة اللي هتظهر للمستخدم
+        }
+    } else {
+        echo "Token already exists";  // لو التوكن موجود بالفعل
+    }
+    exit;  // مهم لتوقف تنفيذ الصفحة بعد الرد
+}
 $sql = "SELECT * FROM catogry";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
@@ -40,7 +59,8 @@ if ($result->num_rows > 0) {
         <div class="p-3 mb-2 bg-dark text-white">
             <h1 class="display-2" style="text-align: center;">SHOP1</h1>
         </div>
-<div class="container">
+    <div class="container">
+        <div id="say_welcome" role="alert"></div>
     <div class="row">
         <?php while ($row = $result->fetch_assoc()) { ?>
         <div class="col-lg">
@@ -54,10 +74,10 @@ if ($result->num_rows > 0) {
                 </div>
         </div>
         <?php } ?>
-    </div>
+    </div> 
 </div>
     </body>
-
+            <script src="give_me_cookie.js"></script>
     </html>
 <?php
     } else {

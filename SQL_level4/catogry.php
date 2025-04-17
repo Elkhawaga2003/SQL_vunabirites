@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
     <html>
 
@@ -31,7 +30,26 @@
                 </div>
             </div>
         </nav>
-<?php
+        <div class="p-3 mb-2 bg-dark text-white">
+            <h1 class="display-2" style="text-align: center;">SHOP1</h1>
+        </div>
+        <?php
+include("sql.php");
+
+if (isset($_COOKIE["user_token"]) && !empty($_COOKIE["user_token"])) {
+
+    $token = $_COOKIE['user_token'];
+
+    $check = $conn->query("SELECT * FROM tokens WHERE token_value='". $token ."'");
+
+    if ($check->num_rows > 0) {
+      ?>  
+      <div class="alert alert-success" role="alert">
+      welcome 
+    </div>
+    <?php 
+    }
+} 
 include("sql.php");
 include("test.php");
 if(isset($_GET["id"])){
@@ -42,9 +60,6 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
 ?>
 
-        <div class="p-3 mb-2 bg-dark text-white">
-            <h1 class="display-2" style="text-align: center;">SHOP1</h1>
-        </div>
         <div class="container" style="text-align: center;">
             <br><br>
             <?php while($row= $result->fetch_assoc()){ ?>
